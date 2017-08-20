@@ -6,8 +6,17 @@ filename=$(basename "$fullfile")
 extension="${filename##*.}"
 filename="${filename%.*}"
 
+rm -f $fullfile
+
 g++-7 -std=c++14 -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 -Wduplicated-cond -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fsanitize=address -fsanitize=undefined -fno-sanitize-recover -fstack-protector $1 -o $filename
 
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 if [[ $# -gt 1 ]]; then
+  if [[ ! -s $2 ]]; then
+    echo -e "${RED}Input file is empty!${NC}"
+  fi
+
   ./$filename < $2
 fi
